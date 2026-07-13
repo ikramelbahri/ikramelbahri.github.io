@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ikram Elbahri | Data Analyst</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --border: #30363d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+  header {
+    padding: 100px 0 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  header h1 { font-size: 2.4rem; margin-bottom: 8px; }
+  header p.role { color: var(--accent); font-size: 1.1rem; margin-bottom: 16px; }
+  header p.intro { color: var(--muted); max-width: 600px; }
+
+  section { padding: 60px 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+  section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+  }
+
+  .skills { display: flex; flex-wrap: wrap; gap: 10px; }
+  .skill-tag {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+  }
+
+  .project {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+  .project h3 { font-size: 1.15rem; margin-bottom: 6px; }
+  .project .tools { color: var(--accent); font-size: 0.85rem; margin-bottom: 12px; }
+  .project p { color: var(--muted); margin-bottom: 12px; }
+  .project a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+  .project a:hover { text-decoration: underline; }
+
+  .contact-links { display: flex; gap: 20px; flex-wrap: wrap; }
+  .contact-links a {
+    color: var(--text);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+  .contact-links a:hover { border-color: var(--accent); color: var(--accent); }
+
+  footer { text-align: center; padding: 30px 0; color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Ikram Elbahri</h1>
+      <p class="role">Data Analyst</p>
+      <p class="intro">
+        MSc Data Science graduate with hands-on experience turning messy data into
+        clear insights — from Power BI dashboards to Python-based risk modelling.
+        I like finding the story hiding in a spreadsheet.
+      </p>
+    </header>
+
+    <section id="about">
+      <h2>About</h2>
+      <p>
+        I'm a data analyst based in the UK with a background spanning business
+        support, client operations, and data science. My MSc dissertation used
+        London geospatial and traffic data to model accident risk, and I've since
+        applied similar analytical thinking to data cleaning, dashboarding, and
+        reporting in fast-moving business environments.
+      </p>
+    </section>
+
+    <section id="skills">
+      <h2>Skills</h2>
+      <div class="skills">
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">Power BI</span>
+        <span class="skill-tag">Excel</span>
+        <span class="skill-tag">Data Cleaning</span>
+        <span class="skill-tag">Data Visualization</span>
+        <span class="skill-tag">Statistical Modelling</span>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Projects</h2>
+
+      <div class="project">
+        <h3>London Traffic Accident Risk Modelling</h3>
+        <div class="tools">Python · Geospatial Analysis · Statistical Modelling</div>
+        <p>
+          MSc dissertation project using London geospatial and traffic data to
+          build a model estimating accident risk across different areas of the
+          city. [Add a line on your method and key finding here.]
+        </p>
+        <a href="#">View on GitHub →</a>
+      </div>
+
+      <div class="project">
+        <h3>Business Dashboard & Reporting</h3>
+        <div class="tools">Power BI · Excel</div>
+        <p>
+          Built dashboards to track compliance and business performance metrics,
+          turning raw data into reports used for decision-making.
+          [Add specifics you can share here.]
+        </p>
+        <a href="#">View on GitHub →</a>
+      </div>
+
+      <div class="project">
+        <h3>[Add a third project]</h3>
+        <div class="tools">[Tools used]</div>
+        <p>[Short description — problem, approach, result.]</p>
+        <a href="#">View on GitHub →</a>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <div class="contact-links">
+        <a href="mailto:youremail@example.com">Email</a>
+        <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+        <a href="https://github.com/ikramelbahri" target="_blank">GitHub</a>
+      </div>
+    </section>
+
+    <footer>
+      &copy; 2026 Ikram Elbahri
+    </footer>
+  </div>
+
+</body>
+</html>
