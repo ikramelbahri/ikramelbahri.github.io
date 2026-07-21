@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UK Health Inequality Analysis | Ikram Elbahri</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-dim: rgba(88, 166, 255, 0.12);
+    --border: #30363d;
+    --up: #3fb950;
+    --down: #f85149;
+    --amber: #d29922;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  .back-link {
+    display: inline-block;
+    padding: 32px 0 0;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  header { padding: 24px 0 48px; border-bottom: 1px solid var(--border); }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+  header h1 { font-size: 2.2rem; margin-bottom: 14px; line-height: 1.2; }
+  header p.subtitle { color: var(--muted); font-size: 1.05rem; max-width: 660px; }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .meta-item { font-size: 0.85rem; }
+  .meta-item .label { color: var(--muted); display: block; margin-bottom: 4px; }
+  .meta-item .value { color: var(--text); }
+
+  section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+  section h2 { font-size: 1.4rem; margin-bottom: 20px; }
+  section h3 { font-size: 1.05rem; margin: 28px 0 12px; color: var(--text); }
+  section p { color: var(--muted); margin-bottom: 14px; max-width: 700px; }
+  section ul, section ol { color: var(--muted); margin-left: 20px; margin-bottom: 14px; }
+  section li { margin-bottom: 8px; }
+  section strong { color: var(--text); }
+
+  code {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    color: var(--accent);
+  }
+
+  .tool-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tool-tag {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-size: 0.82rem;
+    color: var(--text);
+  }
+
+  /* Key findings — with confidence badges */
+  .findings-list { margin-top: 8px; }
+  .finding-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .badge.confirmed { background: rgba(63, 185, 80, 0.15); color: var(--up); }
+  .badge.caveat { background: rgba(210, 153, 34, 0.15); color: var(--amber); }
+  .badge.hypothesis { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
+  .finding-card .headline { font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .finding-card .stat-line { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.85rem; color: var(--accent); margin-bottom: 8px; }
+  .finding-card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 0; }
+
+  /* Dashboard images */
+  .dashboard-block { margin-bottom: 40px; }
+  .dashboard-block h3 { font-size: 1rem; margin-bottom: 6px; color: var(--text); }
+  .dashboard-block .caption { color: var(--muted); font-size: 0.88rem; margin-bottom: 14px; }
+  .dashboard-block img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: block;
+  }
+
+  /* Model comparison table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 20px;
+    font-size: 0.88rem;
+  }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  th { color: var(--text); font-weight: 600; background: var(--panel); }
+  td { color: var(--muted); }
+  td.highlight { color: var(--accent); font-weight: 600; }
+  tr.final-row td { color: var(--text); font-weight: 600; }
+
+  .ranking-line {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.98rem;
+  }
+
+  /* Methodology steps */
+  .steps { counter-reset: step; }
+  .step { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+  .step-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+  .step-text p { margin-bottom: 4px; }
+  .step-text strong { color: var(--text); }
+
+  /* Limitations box */
+  .limitations-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--down);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-top: 16px;
+  }
+  .limitations-box .item { margin-bottom: 16px; }
+  .limitations-box .item:last-child { margin-bottom: 0; }
+  .limitations-box .item .t { font-weight: 600; color: var(--text); font-size: 0.95rem; margin-bottom: 4px; }
+  .limitations-box .item p { color: var(--muted); font-size: 0.9rem; margin-bottom: 0; }
+
+  .quote-block {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  .cta-row { display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
+  .cta-row a {
+    color: var(--text);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+  .cta-row a:hover { border-color: var(--accent); color: var(--accent); }
+
+  footer { text-align: center; padding: 40px 0; color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <a class="back-link" href="index.html">&larr; Back to portfolio</a>
+
+    <header>
+      <div class="eyebrow">Data Science / Machine Learning Project</div>
+      <h1>UK Health Inequality: Does Deprivation Predict Population Health?</h1>
+      <p class="subtitle">
+        A geospatial and machine learning analysis of health outcomes across
+        304 English local authorities — testing which type of deprivation
+        most strongly predicts poor health, and stress-testing that answer
+        until it either held up or broke.
+      </p>
+
+      <div class="meta-row">
+        <div class="meta-item"><span class="label">Tools</span><span class="value">Python, scikit-learn, GeoPandas, Power BI</span></div>
+        <div class="meta-item"><span class="label">Data sources</span><span class="value">ONS Health Index, English Indices of Deprivation 2019</span></div>
+        <div class="meta-item"><span class="label">Scope</span><span class="value">304 English local authorities</span></div>
+        <div class="meta-item"><span class="label">Method</span><span class="value">Ridge / Random Forest / Gradient Boosting, cross-validated</span></div>
+      </div>
+    </header>
+
+    <section id="problem">
+      <h2>The question</h2>
+      <p>
+        UK public health conversations often treat "deprivation" as a single thing —
+        poorer areas have worse health, the story usually stops there. But deprivation
+        is actually seven distinct, only loosely related conditions: income,
+        employment, education, crime, housing barriers, living environment, and
+        pre-existing health burden. I wanted to find out which of these actually
+        drives poor health outcomes the most, using real government data and a
+        properly validated model — not just a single correlation number.
+      </p>
+      <p>
+        Just as important as the answer was being honest about what the data and
+        models could and couldn't actually prove. A large part of this project ended
+        up being about stress-testing my own first conclusion, finding it didn't hold
+        up, and working out why.
+      </p>
+    </section>
+
+    <section id="findings">
+      <h2>Key findings</h2>
+      <div class="findings-list">
+
+        <div class="finding-card">
+          <span class="badge confirmed">Confirmed</span>
+          <div class="headline">Deprivation and health outcomes are strongly linked</div>
+          <div class="stat-line">r = &minus;0.894 &nbsp;|&nbsp; n = 304 local authorities &nbsp;|&nbsp; 2021 Health Index vs. IMD average score</div>
+          <p>A strong, consistent negative correlation holds across nearly every local authority in England, replicated across all three models tested.</p>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge confirmed">Confirmed</span>
+          <div class="headline">Six deprivation domains explain ~83% of the variation in health outcomes</div>
+          <div class="stat-line">5-fold cross-validated R&sup2; = 0.831 &plusmn; 0.050</div>
+          <p>This is the honestly-validated figure, not the single best train/test split, which would have overstated it slightly at R&sup2; = 0.845.</p>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge caveat">Caveat</span>
+          <div class="headline">"Income is the strongest predictor" was the first answer — and it didn't hold up</div>
+          <div class="stat-line">Random Forest importance: income 84&ndash;94%, unstable across random seeds</div>
+          <p>Income deprivation is correlated at r=0.94 with employment, r=0.88 with health deprivation, and r=0.75 with education. The model was crediting one variable for work several were doing together.</p>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge confirmed">Confirmed</span>
+          <div class="headline">The corrected ranking: health deprivation and crime lead, not income alone</div>
+          <div class="stat-line">Health Deprivation &asymp; Crime &nbsp;&gt;&nbsp; Income &asymp; Education &nbsp;&gt;&nbsp; Barriers &nbsp;&gt;&nbsp; Living Environment</div>
+          <p>Ridge Regression, better suited to correlated predictors, gave a stable ranking once employment deprivation (the source of a sign-flip anomaly) was removed.</p>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge hypothesis">Hypothesis</span>
+          <div class="headline">England's post-war "New Towns" cluster among the worst-performing outliers</div>
+          <div class="stat-line">Stevenage &minus;11.80 &nbsp;|&nbsp; Boston &minus;11.62 &nbsp;|&nbsp; Harlow &minus;11.27 (residual, health points below predicted)</div>
+          <p>These towns have only moderate deprivation scores but some of the worst health outcomes relative to prediction in the country — a pattern the data surfaces but doesn't explain.</p>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge confirmed">Confirmed</span>
+          <div class="headline">Some areas consistently beat their deprivation-predicted outcome</div>
+          <div class="stat-line">Harrogate +10.96 &nbsp;|&nbsp; Eden +9.90 &nbsp;|&nbsp; Great Yarmouth +9.90</div>
+          <p>Great Yarmouth stands out — it has meaningfully higher deprivation than the other top performers, yet still outperforms expectation.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="dashboard">
+      <h2>The dashboard</h2>
+
+      <div class="dashboard-block">
+        <h3>1. Overview</h3>
+        <p class="caption">National picture: health outcomes and deprivation mapped side by side across England, with headline averages.</p>
+        <img src="images/health-inequality/01_overview.png" alt="Overview page showing side-by-side maps of health outcomes and deprivation across England, plus average health and deprivation score KPIs">
+      </div>
+
+      <div class="dashboard-block">
+        <h3>2. Outlier Spotlight</h3>
+        <p class="caption">Where actual health outcomes diverge from what deprivation alone would predict — the residual map, plus the specific local authorities beating or missing expectations.</p>
+        <img src="images/health-inequality/02_outlier_spotlight.png" alt="Outlier Spotlight page showing a residual map of England plus two ranked tables of local authorities that outperform or underperform their predicted health outcome">
+      </div>
+    </section>
+
+    <section id="method">
+      <h2>Data &amp; method</h2>
+
+      <h3>Sourcing &amp; cleaning</h3>
+      <p>Two official government datasets, matched at local authority level:</p>
+      <ul>
+        <li><strong>ONS Health Index</strong> (2015&ndash;2021) — population health outcomes, behaviours, and circumstances by local authority.</li>
+        <li><strong>English Indices of Deprivation 2019</strong> (MHCLG) — seven domain scores: income, employment, education, health, crime, barriers to housing/services, living environment.</li>
+      </ul>
+      <p>
+        Both were filtered to Lower Tier Local Authority (LTLA) level and merged on
+        area code. <strong>304 of 317</strong> English authorities matched cleanly; the
+        remaining 13 were unmatched due to local government boundary mergers between
+        the two datasets' vintages (e.g. Buckinghamshire's four former districts,
+        Northamptonshire's seven), plus standard statistical exclusions for the Isles
+        of Scilly and City of London.
+      </p>
+
+      <h3>Modelling log</h3>
+      <p>A genuine sequence — each step's result determined the next one.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <p><strong>Baseline correlation &amp; outlier identification.</strong> Established r = &minus;0.894 between overall IMD score and 2021 health outcome, then computed residuals against a fitted trend line to surface the local authorities furthest from expectation.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <p><strong>Random Forest on all seven domains.</strong> R&sup2; = 0.833. Feature importance suggested income deprivation dominated at 84&ndash;94% of the model's predictive weight.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <p><strong>Stress-tested that ranking.</strong> Checked pairwise correlations between domains and reran the model across five random seeds. The "top predictor" changed nearly every time — not stable enough to report as-is.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <p><strong>Switched to Ridge Regression</strong>, which handles correlated predictors more gracefully than tree-based importance. One coefficient (employment) still showed an implausible sign-flip — a symptom of the same correlation issue.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-text">
+            <p><strong>Removed employment, re-ran on six domains.</strong> R&sup2; barely moved (0.851 &rarr; 0.845) and every coefficient corrected to the expected direction — confirming employment wasn't contributing independent signal.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div class="step-text">
+            <p><strong>Added Gradient Boosting</strong> as a third, independent model (R&sup2; = 0.851) &mdash; confirming the accuracy ceiling, but reproducing the same tree-based instability in feature ranking, reinforcing that this was a genuine methodological pattern rather than a one-off.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">7</div>
+          <div class="step-text">
+            <p><strong>5-fold cross-validation</strong> on the final model. R&sup2; = 0.831 &plusmn; 0.050 across folds &mdash; lower than the single best split, and the more honest number to report.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Model comparison</h3>
+      <table>
+        <tr><th>Model</th><th>R&sup2;</th><th>Notes</th></tr>
+        <tr><td>Random Forest (7 domains)</td><td>0.833</td><td>Good fit, but unstable feature importance</td></tr>
+        <tr><td>Ridge (7 domains)</td><td>0.851</td><td>Best raw fit, one sign-flip anomaly</td></tr>
+        <tr class="final-row"><td>Ridge (6 domains, final)</td><td class="highlight">0.845</td><td>Cleanest, fully interpretable</td></tr>
+        <tr><td>Gradient Boosting (6 domains)</td><td>0.851</td><td>Confirms accuracy, reproduces instability</td></tr>
+        <tr class="final-row"><td>Ridge, 5-fold cross-validated</td><td class="highlight">0.831 &plusmn; 0.050</td><td>Most honest, reported estimate</td></tr>
+      </table>
+
+      <h3>Final domain ranking</h3>
+      <p>By coefficient strength, all pointing the statistically expected (negative) direction:</p>
+      <div class="ranking-line">Health Deprivation &asymp; Crime &nbsp;&gt;&nbsp; Income &asymp; Education &nbsp;&gt;&nbsp; Barriers to Housing &nbsp;&gt;&nbsp; Living Environment</div>
+
+      <div class="tool-tags">
+        <span class="tool-tag">Python (pandas, scikit-learn)</span>
+        <span class="tool-tag">GeoPandas</span>
+        <span class="tool-tag">Random Forest / Ridge / Gradient Boosting</span>
+        <span class="tool-tag">5-fold cross-validation</span>
+        <span class="tool-tag">ONS &amp; MHCLG Open Data</span>
+        <span class="tool-tag">Power BI</span>
+      </div>
+    </section>
+
+    <section id="interpretation">
+      <h2>Interpretation &mdash; and its limits</h2>
+      <p>
+        A geographic pattern worth naming directly: several of the strongest negative
+        outliers &mdash; <strong>Stevenage, Harlow, and to some extent Boston</strong>
+        &mdash; are post-war "New Towns," built rapidly under a distinct
+        mid-20th-century planning model. Their health outcomes are meaningfully worse
+        than their moderate deprivation scores would predict, which raises a genuine
+        hypothesis about whether that planning legacy created health-relevant
+        conditions a simple deprivation score doesn't capture. This is a hypothesis
+        the data points to, not a conclusion it proves.
+      </p>
+
+      <div class="quote-block">
+        "Health outcomes are driven by a cluster of interrelated socioeconomic factors
+        rather than any single dominant cause. Because these factors are naturally
+        correlated in the real world, the data cannot cleanly isolate one variable as
+        'the' cause &mdash; what it can say confidently is that physical and
+        environmental barriers matter comparatively little next to economic and
+        crime-related deprivation."
+      </div>
+
+      <h3>Limitations</h3>
+      <div class="limitations-box">
+        <div class="item">
+          <div class="t">Correlation, not causation</div>
+          <p>A strong association between deprivation and health doesn't establish which causes which — poverty could drive poor health, poor health could limit earning capacity, or a third factor (e.g. local economic decline) could drive both simultaneously.</p>
+        </div>
+        <div class="item">
+          <div class="t">Model instability is itself a finding</div>
+          <p>Tree-based models (Random Forest, Gradient Boosting) gave meaningfully different "top predictor" rankings depending on random seed, due to multicollinearity between deprivation domains. Reporting a single clean winner would have overstated the certainty of the result.</p>
+        </div>
+        <div class="item">
+          <div class="t">Area-level, not individual-level</div>
+          <p>All data is averaged across entire local authorities, which can mask significant internal variation — a wealthy suburb and a struggling estate in the same district are blended into one number.</p>
+        </div>
+        <div class="item">
+          <div class="t">Data vintage mismatch</div>
+          <p>The deprivation data (2019) and health data (2015&ndash;2021) don't perfectly align in time, and local government boundary changes meant 13 of 317 English authorities couldn't be matched.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="links">
+      <h2>Explore further</h2>
+      <p>Full analysis notebook, cleaned datasets, and the Power BI file are available on request or via GitHub.</p>
+      <div class="cta-row">
+        <a href="https://github.com/ikramelbahri" target="_blank">View on GitHub</a>
+        <a href="index.html">Back to portfolio</a>
+      </div>
+    </section>
+
+    <footer>&copy; 2026 Ikram Elbahri</footer>
+  </div>
+
+</body>
+</html>
