@@ -22,9 +22,9 @@
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.65;
+    line-height: 1.7;
   }
-  .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  .container { max-width: 820px; margin: 0 auto; padding: 0 24px; }
 
   .back-link { display: inline-block; padding: 32px 0 0; color: var(--muted); text-decoration: none; font-size: 0.9rem; }
   .back-link:hover { color: var(--accent); }
@@ -42,11 +42,11 @@
   section { padding: 48px 0; border-bottom: 1px solid var(--border); }
   section:last-of-type { border-bottom: none; }
   section h2 { font-size: 1.4rem; margin-bottom: 20px; }
-  section h3 { font-size: 1.05rem; margin: 28px 0 12px; color: var(--text); }
-  section p { color: var(--muted); margin-bottom: 14px; max-width: 700px; }
-  section ul, section ol { color: var(--muted); margin-left: 20px; margin-bottom: 14px; }
+  section h3 { font-size: 1.05rem; margin: 30px 0 12px; color: var(--text); }
+  section p { color: var(--muted); margin-bottom: 16px; max-width: 720px; }
+  section p strong { color: var(--text); }
+  section ul { color: var(--muted); margin-left: 20px; margin-bottom: 16px; }
   section li { margin-bottom: 8px; }
-  section strong { color: var(--text); }
 
   code {
     background: var(--panel); border: 1px solid var(--border); padding: 2px 6px;
@@ -56,15 +56,33 @@
   .tool-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
   .tool-tag { background: var(--panel); border: 1px solid var(--border); padding: 5px 12px; border-radius: 16px; font-size: 0.82rem; color: var(--text); }
 
-  .findings-list { margin-top: 8px; }
-  .finding-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
-  .badge { display: inline-block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 12px; margin-bottom: 10px; }
-  .badge.confirmed { background: rgba(63, 185, 80, 0.15); color: var(--up); }
-  .badge.caveat { background: rgba(210, 153, 34, 0.15); color: var(--amber); }
-  .badge.hypothesis { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
-  .finding-card .headline { font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-  .finding-card .stat-line { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.85rem; color: var(--accent); margin-bottom: 8px; }
-  .finding-card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 0; }
+  .callout {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 20px 0;
+  }
+  .callout p { color: var(--text); font-size: 0.95rem; margin-bottom: 0; }
+  .callout.warn { border-left-color: var(--amber); }
+  .callout.warn p { color: var(--muted); }
+
+  .stat-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .stat-strip .stat { flex: 1; min-width: 130px; }
+  .stat-strip .stat .num { font-size: 1.4rem; font-weight: 700; color: var(--accent); }
+  .stat-strip .stat.bad .num { color: var(--down); }
+  .stat-strip .stat.good .num { color: var(--up); }
+  .stat-strip .stat .lbl { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
 
   .dashboard-block { margin-bottom: 40px; }
   .dashboard-block h3 { font-size: 1rem; margin-bottom: 6px; color: var(--text); }
@@ -78,14 +96,16 @@
   td.highlight { color: var(--accent); font-weight: 600; }
   tr.final-row td { color: var(--text); font-weight: 600; }
 
-  .steps { counter-reset: step; }
-  .step { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
-  .step-num {
-    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-dim);
-    color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600;
+  .example-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
   }
-  .step-text p { margin-bottom: 4px; }
-  .step-text strong { color: var(--text); }
+  .example-card .tag { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 10px; }
+  .example-card table { margin: 10px 0 0; font-size: 0.85rem; }
+  .example-card p { margin-bottom: 8px; }
 
   .limitations-box {
     background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--down);
@@ -95,11 +115,6 @@
   .limitations-box .item:last-child { margin-bottom: 0; }
   .limitations-box .item .t { font-weight: 600; color: var(--text); font-size: 0.95rem; margin-bottom: 4px; }
   .limitations-box .item p { color: var(--muted); font-size: 0.9rem; margin-bottom: 0; }
-
-  .quote-block {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px;
-    margin: 16px 0; color: var(--text); font-size: 0.95rem; font-style: italic; line-height: 1.7;
-  }
 
   .cta-row { display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
   .cta-row a { color: var(--text); text-decoration: none; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; }
@@ -117,162 +132,221 @@
       <div class="eyebrow">Data Science / Machine Learning Project</div>
       <h1>Credit Card Default Prediction: When Accuracy Lies</h1>
       <p class="subtitle">
-        A classification model predicting credit card default risk from 30,000
-        real client accounts — and a demonstration of why the most "accurate"
-        model was actually the worst business decision.
+        A model that got 81% of predictions right, and still would have been a bad
+        decision to actually use. This is the story of why — and what a genuinely
+        useful credit risk model looks like once you account for it.
       </p>
 
       <div class="meta-row">
         <div class="meta-item"><span class="label">Tools</span><span class="value">Python, scikit-learn, pandas</span></div>
         <div class="meta-item"><span class="label">Data source</span><span class="value">UCI Default of Credit Card Clients (30,000 accounts)</span></div>
-        <div class="meta-item"><span class="label">Method</span><span class="value">Logistic Regression &amp; Random Forest, class-imbalance handling</span></div>
-        <div class="meta-item"><span class="label">Framing</span><span class="value">Cost-based business evaluation</span></div>
+        <div class="meta-item"><span class="label">Method</span><span class="value">Logistic Regression &amp; Random Forest</span></div>
       </div>
     </header>
 
     <section id="problem">
-      <h2>The question</h2>
+      <h2>The set-up</h2>
       <p>
-        Most classification tutorials stop at accuracy. This project deliberately
-        doesn't — the real question a lender cares about isn't "how often is the
-        model right overall," it's "how much money does using this model actually
-        save or cost." Those two questions can have completely different answers,
-        and this project set out to prove exactly that using a real, imbalanced
-        credit default dataset.
+        The dataset is 30,000 real credit card clients in Taiwan, tracked over six
+        months in 2005: what they owed each month, what they paid, and how late they
+        were. The task is simple to state — predict who defaults the following month
+        — but the way most people evaluate a model like this (accuracy) turns out to
+        hide the one thing that actually matters to a lender.
       </p>
       <p>
-        The dataset covers 30,000 Taiwanese credit card clients (2005) with six
-        months of payment history, bill amounts, and repayment behavior, with the
-        goal of predicting whether each client defaults the following month.
+        About 78% of clients in this dataset never default. That single fact quietly
+        shapes everything that follows.
       </p>
     </section>
 
-    <section id="findings">
-      <h2>Key findings</h2>
-      <div class="findings-list">
+    <section id="trap">
+      <h2>The accuracy trap</h2>
+      <p>
+        The first model I built, a plain Logistic Regression, scored <strong>81%
+        accuracy</strong>. On paper, that looks like a strong result. But accuracy
+        just measures "how often was the model right overall" — and when 78% of
+        people never default, a model can get most of its calls right without doing
+        anything useful at all, simply by leaning toward "safe" most of the time.
+      </p>
+      <p>
+        Looking past the headline number told a different story:
+      </p>
+      <div class="stat-strip">
+        <div class="stat bad"><div class="num">30%</div><div class="lbl">of actual defaulters correctly caught</div></div>
+        <div class="stat bad"><div class="num">935</div><div class="lbl">real defaulters missed, out of 1,327 in the test set</div></div>
+        <div class="stat"><div class="num">81%</div><div class="lbl">headline accuracy — technically true, practically misleading</div></div>
+      </div>
+      <p>
+        For a lender, a missed defaulter is the expensive kind of mistake &mdash; credit
+        gets extended to someone who won't pay it back. A model that misses seven out
+        of every ten actual defaulters isn't a strong model wearing a good number;
+        it's a weak model wearing a flattering one.
+      </p>
+    </section>
 
-        <div class="finding-card">
-          <span class="badge caveat">Caveat</span>
-          <div class="headline">81% accuracy hid a model that missed 70% of actual defaulters</div>
-          <div class="stat-line">Baseline Logistic Regression: recall on defaulters = 0.30, accuracy = 0.81</div>
-          <p>With 78% of clients never defaulting, a model can score well on accuracy while still failing at the one job that matters — catching risky clients.</p>
-        </div>
+    <section id="fixes">
+      <h2>Three ways to fix it — and what each one actually does</h2>
+      <p>
+        The imbalance is the root problem, so the fix has to address that directly,
+        not just tweak the model at the edges. I tried three approaches, each
+        working on a different part of the pipeline:
+      </p>
 
-        <div class="finding-card">
-          <span class="badge confirmed">Confirmed</span>
-          <div class="headline">Addressing class imbalance cut estimated financial losses by 37%</div>
-          <div class="stat-line">NT$40.9M (naive model) &rarr; NT$25.7M (balanced Logistic Regression)</div>
-          <p>Translating model errors into estimated NT$ cost — using each client's real average bill as the loss estimate — turned an abstract statistics problem into a concrete business one.</p>
-        </div>
+      <h3>1. Lower the decision threshold</h3>
+      <p>
+        By default, a model calls something "default" only if it's more than 50%
+        confident. Lowering that bar to 30% catches more real defaulters, at the
+        cost of more false alarms. This is a genuinely useful lever &mdash; but it's
+        worth being precise about what it does and doesn't change. It doesn't make
+        the model smarter. It just moves where you draw the line on the exact same
+        underlying predictions. I confirmed this directly: the plain model and the
+        threshold-adjusted model share an <strong>identical ROC-AUC of 0.744</strong>
+        &mdash; proof that nothing about the model's actual ability to separate
+        defaulters from non-defaulters had changed, only where I chose to act on it.
+      </p>
 
-        <div class="finding-card">
-          <span class="badge confirmed">Confirmed</span>
-          <div class="headline">The "best" model depends on what a false alarm actually costs</div>
-          <div class="stat-line">Balanced Logistic Regression cheapest at low false-positive cost; Random Forest overtakes it as that cost rises</div>
-          <p>A sensitivity check across four different cost assumptions showed the top-ranked model isn't fixed — it depends on real business context, not a single statistic.</p>
-        </div>
+      <h3>2. Reweight the training itself</h3>
+      <p>
+        <code>class_weight='balanced'</code> tells the model, during training, to
+        treat a mistake on a defaulter as roughly 3.5x more costly than a mistake on
+        a non-defaulter &mdash; roughly matching how outnumbered defaulters actually
+        are in the data. Unlike the threshold trick, this genuinely changes what the
+        model learns, not just how its output gets read. Recall on defaulters jumped
+        from 30% to <strong>60%</strong>.
+      </p>
 
-        <div class="finding-card">
-          <span class="badge confirmed">Confirmed</span>
-          <div class="headline">Payment behavior predicts default far better than demographics</div>
-          <div class="stat-line">Top 4 features (all payment-history related) = ~50% of Random Forest's predictive weight; age, sex, education, marital status don't appear in the top 15</div>
-          <p>Three of the four most important features were engineered from raw data, not present in the original file — validating the feature engineering step directly.</p>
-        </div>
+      <h3>3. Try a different kind of model</h3>
+      <p>
+        Random Forest can capture non-linear patterns &mdash; the idea that risk
+        might not rise smoothly with lateness, but jump sharply past some threshold.
+        With the same class balancing applied, it edged out Logistic Regression on
+        every statistical measure: recall of 61%, and a meaningfully higher
+        <strong>ROC-AUC of 0.777</strong> against 0.747.
+      </p>
 
-        <div class="finding-card">
-          <span class="badge caveat">Caveat</span>
-          <div class="headline">Threshold adjustment isn't model improvement — it's a different trade-off on the same model</div>
-          <div class="stat-line">Plain and threshold-adjusted Logistic Regression share an identical ROC-AUC (0.744)</div>
-          <p>Confirmed visually via the ROC curve: only changing the class weights or the algorithm itself moved the underlying curve; changing the decision threshold just moved where you sit on it.</p>
-        </div>
-
+      <div class="callout">
+        <p>On pure statistics, Random Forest is the clear winner. But statistics
+        aren't the whole story here — see the cost analysis below for why that
+        conclusion doesn't survive contact with real money.</p>
       </div>
     </section>
 
-    <section id="dashboard">
-      <h2>The dashboard</h2>
+    <section id="feature-story">
+      <h2>What actually predicts default: a real example</h2>
+      <p>
+        Rather than feed the model 18 raw monthly columns, I engineered features
+        that capture <em>trajectory</em> &mdash; is someone's debt growing or
+        shrinking, are they paying less of their bill over time, how many months in
+        a row were they late. One real client from the dataset makes the case for
+        why this mattered better than any summary statistic could:
+      </p>
+
+      <div class="example-card">
+        <div class="tag">Client 1 &middot; Credit limit NT$20,000 &middot; Age 24 &middot; Defaulted the following month</div>
+        <table>
+          <tr><th>Month</th><th>Bill owed</th><th>Amount paid</th><th>Lateness</th></tr>
+          <tr><td>April</td><td>0</td><td>0</td><td>&minus;2</td></tr>
+          <tr><td>May</td><td>0</td><td>0</td><td>&minus;2</td></tr>
+          <tr><td>June</td><td>0</td><td>0</td><td>&minus;1</td></tr>
+          <tr><td>July</td><td>689</td><td>0</td><td>&minus;1</td></tr>
+          <tr><td>August</td><td>3,102</td><td>689</td><td>2</td></tr>
+          <tr><td>September</td><td>3,913</td><td>0</td><td>2</td></tr>
+        </table>
+      </div>
+
+      <p>
+        Look only at April, and this person looks perfectly safe &mdash; zero
+        balance, nothing owed. Look at the full trajectory, and a different picture
+        emerges: someone who wasn't using their card at all, then suddenly started
+        spending, immediately fell behind, made one partial catch-up payment, then
+        stopped paying while their balance kept climbing. A snapshot model would
+        have missed this person entirely. A trajectory-aware model, using features
+        like <code>bill_trend</code> (their debt grew by NT$3,913 over the window)
+        and <code>months_delayed</code>, would flag them correctly.
+      </p>
+      <p>
+        This wasn't just a hunch that paid off &mdash; it's borne out directly in
+        the Random Forest's feature importance. <strong>The top four features
+        &mdash; most recent lateness, months delayed, and two engineered trend
+        measures &mdash; account for roughly half the model's total predictive
+        weight.</strong> Three of those four didn't exist in the original file; they
+        were built. Meanwhile, age, sex, education, and marital status don't appear
+        in the top fifteen features at all. Behavior predicts default. Who someone
+        is, on this data, barely does.
+      </p>
+    </section>
+
+    <section id="cost">
+      <h2>Turning statistics into money</h2>
+      <p>
+        ROC-AUC and recall are useful, but they don't answer the question a lender
+        actually has: <em>which model saves the most money?</em> So I translated
+        every model's mistakes into an estimated NT$ cost &mdash; a missed defaulter
+        costs roughly what that person owed (using their real average bill from the
+        data, not a guessed number), and a false alarm costs a smaller, assumed
+        fraction of that bill in lost interest revenue.
+      </p>
 
       <div class="dashboard-block">
         <h3>Model Comparison</h3>
-        <p class="caption">Estimated real financial cost of each modelling approach, translated from prediction errors into NT$ using each client's actual bill amount.</p>
+        <p class="caption">Estimated real financial cost of each approach, in NT$.</p>
         <img src="images/credit-risk/01_model_comparison.png" alt="Power BI dashboard showing estimated financial cost by model as a bar chart, plus a card showing NT$15.25M in potential savings from addressing class imbalance">
+      </div>
+
+      <p>
+        The naive, unadjusted model &mdash; the one with the "best" 81% accuracy
+        &mdash; turned out to be the <strong>most expensive by far</strong>, at an
+        estimated NT$40.9M in losses. Every version that addressed the imbalance
+        problem cost meaningfully less, saving up to <strong>NT$15.25M (37%)</strong>.
+      </p>
+      <p>
+        Here's the more interesting twist: Random Forest had the best ROC-AUC of
+        every model tested, but <strong>balanced Logistic Regression was actually
+        the cheaper option</strong> in NT$ terms &mdash; NT$25.7M versus NT$26.2M.
+        Random Forest catches slightly more defaulters, but it also raises more
+        false alarms, and at a conservative cost assumption, those false alarms add
+        up to more than the extra defaulters it catches are worth.
+      </p>
+
+      <p>
+        I didn't want to rest that conclusion on one arbitrary cost assumption, so I
+        re-ran the comparison across a range of false-positive costs, from 5% to 30%
+        of a client's bill:
+      </p>
+      <ul>
+        <li>At <strong>low</strong> false-positive costs, balanced Logistic Regression wins</li>
+        <li>As false-positive costs <strong>rise</strong>, Random Forest overtakes it &mdash; fewer false alarms start to matter more</li>
+        <li>The naive, unadjusted model never becomes competitive at any assumption tested</li>
+      </ul>
+      <div class="callout warn">
+        <p>The honest conclusion isn't "Model X wins." It's that addressing class
+        imbalance at all is unambiguously worth it, and the choice between the
+        remaining good options depends on a real number &mdash; what a false alarm
+        actually costs the business &mdash; that only the lender itself can supply.</p>
       </div>
 
       <div class="dashboard-block">
         <h3>ROC Curve Comparison</h3>
-        <p class="caption">All three models plotted together — Random Forest visibly outperforms both Logistic Regression variants across nearly the entire curve.</p>
+        <p class="caption">All three models plotted together — notice the two Logistic Regression curves sit almost exactly on top of each other, visual proof that threshold adjustment didn't change the underlying model.</p>
         <img src="images/credit-risk/02_roc_curve.png" alt="ROC curve comparing Logistic Regression, balanced Logistic Regression, and Random Forest, with Random Forest showing the highest AUC of 0.777">
       </div>
     </section>
 
     <section id="method">
-      <h2>Data &amp; method</h2>
-
-      <h3>Sourcing &amp; cleaning</h3>
+      <h2>Data notes</h2>
       <p>
-        <strong>UCI Default of Credit Card Clients</strong> dataset — 30,000 real
-        Taiwanese client accounts (April&ndash;September 2005), 23 features covering
-        demographics, credit limit, six months of payment status, bill amounts, and
-        payment amounts, with a binary default target.
-      </p>
-      <p>
-        Two documented data quality issues were caught and handled explicitly rather
-        than assumed away: <strong>EDUCATION and MARRIAGE contained undocumented
-        category codes</strong> (0, 5, 6 in EDUCATION; 0 in MARRIAGE) not covered by
-        the official data dictionary, folded into existing "Other" categories; and
-        the <strong>PAY_ status columns contain two undocumented values (0 and -2)</strong>
-        that together make up over half the dataset — kept as-is, since they couldn't
-        be dropped, but flagged explicitly as an interpretive ambiguity rather than
-        given an invented confident meaning.
+        Two data quality issues were worth catching rather than assuming away.
+        <strong>EDUCATION and MARRIAGE</strong> contained category codes (0, 5, 6 in
+        EDUCATION; 0 in MARRIAGE) that don't appear anywhere in the official
+        documentation &mdash; folded into the existing "Other" category rather than
+        dropped, to avoid losing data over an edge case. More significantly, the six
+        <strong>PAY_ status columns</strong> contain two undocumented values (0 and
+        -2) that together make up over half the dataset. They couldn't be dropped or
+        ignored at that scale, so they were kept as-is and reported honestly as an
+        interpretive ambiguity in the source data, rather than given an invented,
+        confident meaning.
       </p>
 
-      <h3>Feature engineering</h3>
-      <p>
-        Rather than feeding 18 raw monthly columns directly into the model, six
-        behavioral features were engineered to capture trends rather than snapshots:
-        average and maximum payment delay, count of months delayed, average credit
-        utilization, 6-month bill trend (growing vs. shrinking debt), and a
-        payment-to-bill ratio. Two of these initially produced statistically invalid
-        results (a payment ratio ranging from &minus;546 to 797) due to division by
-        near-zero bill amounts &mdash; caught during review and fixed by capping
-        values to a realistic range rather than silently trusting the raw output.
-      </p>
-
-      <h3>Modelling log</h3>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div class="step-text">
-            <p><strong>Baseline Logistic Regression</strong> (0.5 threshold): 81% accuracy, but only 30% recall on actual defaulters &mdash; the class imbalance problem in action.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div class="step-text">
-            <p><strong>Two imbalance-handling approaches tested independently:</strong> <code>class_weight='balanced'</code> (changes how the model learns) and manual threshold adjustment to 0.3 (changes how predictions are read from the same model).</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-text">
-            <p><strong>Random Forest</strong> added as a second model, also with balanced class weights, to test whether a non-linear model could better separate the classes.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div class="step-text">
-            <p><strong>Cost-based evaluation:</strong> converted each model's false negatives and false positives into estimated NT$ loss, using real client bill amounts rather than an assumed flat cost.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">5</div>
-          <div class="step-text">
-            <p><strong>Sensitivity check:</strong> re-ran the cost comparison across four different false-positive cost assumptions (5%&ndash;30% of bill amount) to test whether the ranking was robust or fragile.</p>
-          </div>
-        </div>
-      </div>
-
-      <h3>Model comparison</h3>
       <table>
         <tr><th>Model</th><th>Recall (defaulters)</th><th>ROC-AUC</th><th>Est. Cost (NT$)</th></tr>
         <tr><td>Logistic Regression (0.5 threshold)</td><td>0.30</td><td>0.744</td><td>40.9M</td></tr>
@@ -291,43 +365,20 @@
       </div>
     </section>
 
-    <section id="interpretation">
-      <h2>Interpretation</h2>
-      <p>
-        The headline finding isn't which single model "wins" &mdash; it's that
-        <strong>the statistically best model and the financially best model were
-        different models</strong>, and the gap between the naive approach and any
-        imbalance-aware approach was large and consistent (30&ndash;40% cost
-        reduction) across every cost assumption tested.
-      </p>
-      <div class="quote-block">
-        "Across a wide range of plausible false-positive cost assumptions, any model
-        that addresses class imbalance substantially outperforms the naive
-        default-threshold model. Among the imbalance-aware options, the single best
-        choice depends on the lender's real cost of declining a good customer
-        relative to the cost of a missed default &mdash; a business judgment, not a
-        statistic to be optimized in isolation."
-      </div>
-    </section>
-
     <section id="limitations">
-      <h2>Limitations</h2>
+      <h2>What this doesn't prove</h2>
       <div class="limitations-box">
         <div class="item">
           <div class="t">2005 Taiwanese data, not current UK data</div>
-          <p>The dataset demonstrates methodology &mdash; imbalanced classification, cost-sensitive evaluation, feature engineering &mdash; rather than making a claim about current UK consumer credit risk specifically.</p>
+          <p>This project demonstrates a methodology — imbalanced classification, cost-sensitive evaluation, behavioral feature engineering — rather than making a claim about current UK consumer credit risk specifically.</p>
         </div>
         <div class="item">
-          <div class="t">Cost assumptions are estimates, not facts</div>
-          <p>The false-positive cost (10% of bill amount, tested from 5&ndash;30%) is a reasonable, stated assumption. A real deployment would need actual cost figures from the business rather than an analyst's estimate.</p>
+          <div class="t">The cost assumptions are estimates, not facts</div>
+          <p>False-positive cost was tested across a 5–30% range as a reasonable estimate. A real deployment would need actual figures from the business, not an analyst's assumption.</p>
         </div>
         <div class="item">
-          <div class="t">Two undocumented category codes in the payment status columns</div>
-          <p>PAY_ values of 0 and -2 make up over half the dataset and aren't officially defined by the data provider. They were kept in the model as-is, but their exact meaning is an informed interpretation, not a confirmed fact.</p>
-        </div>
-        <div class="item">
-          <div class="t">A single train/test split, not cross-validated</div>
-          <p>Given the dataset's size (30,000 rows) this is a reasonable choice, but a production model would benefit from k-fold cross-validation to confirm the reported metrics are stable.</p>
+          <div class="t">A single train/test split</div>
+          <p>Given the dataset's size this is a defensible choice, but cross-validation would give a more robust estimate of how stable these results really are.</p>
         </div>
       </div>
     </section>
@@ -336,7 +387,7 @@
       <h2>Explore further</h2>
       <p>Full analysis notebook and the Power BI file are available on request or via GitHub.</p>
       <div class="cta-row">
-        <a href="https://github.com/ikramelbahri/ikramelbahri.github.io/blob/main/Creditriskml.ipynb" target="_blank">View on GitHub</a>
+        <a href="https://github.com/ikramelbahri" target="_blank">View on GitHub</a>
         <a href="index.html">Back to portfolio</a>
       </div>
     </section>
