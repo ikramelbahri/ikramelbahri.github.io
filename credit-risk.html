@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Card Default Prediction | Ikram Elbahri</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-dim: rgba(88, 166, 255, 0.12);
+    --border: #30363d;
+    --up: #3fb950;
+    --down: #f85149;
+    --amber: #d29922;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  .back-link { display: inline-block; padding: 32px 0 0; color: var(--muted); text-decoration: none; font-size: 0.9rem; }
+  .back-link:hover { color: var(--accent); }
+
+  header { padding: 24px 0 48px; border-bottom: 1px solid var(--border); }
+  .eyebrow { color: var(--accent); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+  header h1 { font-size: 2.2rem; margin-bottom: 14px; line-height: 1.2; }
+  header p.subtitle { color: var(--muted); font-size: 1.05rem; max-width: 660px; }
+
+  .meta-row { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .meta-item { font-size: 0.85rem; }
+  .meta-item .label { color: var(--muted); display: block; margin-bottom: 4px; }
+  .meta-item .value { color: var(--text); }
+
+  section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+  section h2 { font-size: 1.4rem; margin-bottom: 20px; }
+  section h3 { font-size: 1.05rem; margin: 28px 0 12px; color: var(--text); }
+  section p { color: var(--muted); margin-bottom: 14px; max-width: 700px; }
+  section ul, section ol { color: var(--muted); margin-left: 20px; margin-bottom: 14px; }
+  section li { margin-bottom: 8px; }
+  section strong { color: var(--text); }
+
+  code {
+    background: var(--panel); border: 1px solid var(--border); padding: 2px 6px;
+    border-radius: 4px; font-size: 0.85em; color: var(--accent);
+  }
+
+  .tool-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tool-tag { background: var(--panel); border: 1px solid var(--border); padding: 5px 12px; border-radius: 16px; font-size: 0.82rem; color: var(--text); }
+
+  .findings-list { margin-top: 8px; }
+  .finding-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; }
+  .badge { display: inline-block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 12px; margin-bottom: 10px; }
+  .badge.confirmed { background: rgba(63, 185, 80, 0.15); color: var(--up); }
+  .badge.caveat { background: rgba(210, 153, 34, 0.15); color: var(--amber); }
+  .badge.hypothesis { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
+  .finding-card .headline { font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .finding-card .stat-line { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.85rem; color: var(--accent); margin-bottom: 8px; }
+  .finding-card p { color: var(--muted); font-size: 0.92rem; margin-bottom: 0; }
+
+  .dashboard-block { margin-bottom: 40px; }
+  .dashboard-block h3 { font-size: 1rem; margin-bottom: 6px; color: var(--text); }
+  .dashboard-block .caption { color: var(--muted); font-size: 0.88rem; margin-bottom: 14px; }
+  .dashboard-block img { width: 100%; border-radius: 8px; border: 1px solid var(--border); display: block; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 20px; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  th { color: var(--text); font-weight: 600; background: var(--panel); }
+  td { color: var(--muted); }
+  td.highlight { color: var(--accent); font-weight: 600; }
+  tr.final-row td { color: var(--text); font-weight: 600; }
+
+  .steps { counter-reset: step; }
+  .step { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+  .step-num {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--accent-dim);
+    color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600;
+  }
+  .step-text p { margin-bottom: 4px; }
+  .step-text strong { color: var(--text); }
+
+  .limitations-box {
+    background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--down);
+    border-radius: 6px; padding: 20px 24px; margin-top: 16px;
+  }
+  .limitations-box .item { margin-bottom: 16px; }
+  .limitations-box .item:last-child { margin-bottom: 0; }
+  .limitations-box .item .t { font-weight: 600; color: var(--text); font-size: 0.95rem; margin-bottom: 4px; }
+  .limitations-box .item p { color: var(--muted); font-size: 0.9rem; margin-bottom: 0; }
+
+  .quote-block {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px;
+    margin: 16px 0; color: var(--text); font-size: 0.95rem; font-style: italic; line-height: 1.7;
+  }
+
+  .cta-row { display: flex; gap: 14px; margin-top: 8px; flex-wrap: wrap; }
+  .cta-row a { color: var(--text); text-decoration: none; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; }
+  .cta-row a:hover { border-color: var(--accent); color: var(--accent); }
+
+  footer { text-align: center; padding: 40px 0; color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <a class="back-link" href="index.html">&larr; Back to portfolio</a>
+
+    <header>
+      <div class="eyebrow">Data Science / Machine Learning Project</div>
+      <h1>Credit Card Default Prediction: When Accuracy Lies</h1>
+      <p class="subtitle">
+        A classification model predicting credit card default risk from 30,000
+        real client accounts — and a demonstration of why the most "accurate"
+        model was actually the worst business decision.
+      </p>
+
+      <div class="meta-row">
+        <div class="meta-item"><span class="label">Tools</span><span class="value">Python, scikit-learn, pandas</span></div>
+        <div class="meta-item"><span class="label">Data source</span><span class="value">UCI Default of Credit Card Clients (30,000 accounts)</span></div>
+        <div class="meta-item"><span class="label">Method</span><span class="value">Logistic Regression &amp; Random Forest, class-imbalance handling</span></div>
+        <div class="meta-item"><span class="label">Framing</span><span class="value">Cost-based business evaluation</span></div>
+      </div>
+    </header>
+
+    <section id="problem">
+      <h2>The question</h2>
+      <p>
+        Most classification tutorials stop at accuracy. This project deliberately
+        doesn't — the real question a lender cares about isn't "how often is the
+        model right overall," it's "how much money does using this model actually
+        save or cost." Those two questions can have completely different answers,
+        and this project set out to prove exactly that using a real, imbalanced
+        credit default dataset.
+      </p>
+      <p>
+        The dataset covers 30,000 Taiwanese credit card clients (2005) with six
+        months of payment history, bill amounts, and repayment behavior, with the
+        goal of predicting whether each client defaults the following month.
+      </p>
+    </section>
+
+    <section id="findings">
+      <h2>Key findings</h2>
+      <div class="findings-list">
+
+        <div class="finding-card">
+          <span class="badge caveat">Caveat</span>
+          <div class="headline">81% accuracy hid a model that missed 70% of actual defaulters</div>
+          <div class="stat-line">Baseline Logistic Regression: recall on defaulters = 0.30, accuracy = 0.81</div>
+          <p>With 78% of clients never defaulting, a model can score well on accuracy while still failing at the one job that matters — catching risky clients.</p>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge confirmed">Confirmed</span>
+          <div class="headline">Addressing class imbalance cut estimated financial losses by 37%</div>
+          <div class="stat-line">NT$40.9M (naive model) &rarr; NT$25.7M (balanced Logistic Regression)</div>
+          <p>Translating model errors into estimated NT$ cost — using each client's real average bill as the loss estimate — turned an abstract statistics problem into a concrete business one.</p>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge confirmed">Confirmed</span>
+          <div class="headline">The "best" model depends on what a false alarm actually costs</div>
+          <div class="stat-line">Balanced Logistic Regression cheapest at low false-positive cost; Random Forest overtakes it as that cost rises</div>
+          <p>A sensitivity check across four different cost assumptions showed the top-ranked model isn't fixed — it depends on real business context, not a single statistic.</p>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge confirmed">Confirmed</span>
+          <div class="headline">Payment behavior predicts default far better than demographics</div>
+          <div class="stat-line">Top 4 features (all payment-history related) = ~50% of Random Forest's predictive weight; age, sex, education, marital status don't appear in the top 15</div>
+          <p>Three of the four most important features were engineered from raw data, not present in the original file — validating the feature engineering step directly.</p>
+        </div>
+
+        <div class="finding-card">
+          <span class="badge caveat">Caveat</span>
+          <div class="headline">Threshold adjustment isn't model improvement — it's a different trade-off on the same model</div>
+          <div class="stat-line">Plain and threshold-adjusted Logistic Regression share an identical ROC-AUC (0.744)</div>
+          <p>Confirmed visually via the ROC curve: only changing the class weights or the algorithm itself moved the underlying curve; changing the decision threshold just moved where you sit on it.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="dashboard">
+      <h2>The dashboard</h2>
+
+      <div class="dashboard-block">
+        <h3>Model Comparison</h3>
+        <p class="caption">Estimated real financial cost of each modelling approach, translated from prediction errors into NT$ using each client's actual bill amount.</p>
+        <img src="images/credit-risk/01_model_comparison.png" alt="Power BI dashboard showing estimated financial cost by model as a bar chart, plus a card showing NT$15.25M in potential savings from addressing class imbalance">
+      </div>
+
+      <div class="dashboard-block">
+        <h3>ROC Curve Comparison</h3>
+        <p class="caption">All three models plotted together — Random Forest visibly outperforms both Logistic Regression variants across nearly the entire curve.</p>
+        <img src="images/credit-risk/02_roc_curve.png" alt="ROC curve comparing Logistic Regression, balanced Logistic Regression, and Random Forest, with Random Forest showing the highest AUC of 0.777">
+      </div>
+    </section>
+
+    <section id="method">
+      <h2>Data &amp; method</h2>
+
+      <h3>Sourcing &amp; cleaning</h3>
+      <p>
+        <strong>UCI Default of Credit Card Clients</strong> dataset — 30,000 real
+        Taiwanese client accounts (April&ndash;September 2005), 23 features covering
+        demographics, credit limit, six months of payment status, bill amounts, and
+        payment amounts, with a binary default target.
+      </p>
+      <p>
+        Two documented data quality issues were caught and handled explicitly rather
+        than assumed away: <strong>EDUCATION and MARRIAGE contained undocumented
+        category codes</strong> (0, 5, 6 in EDUCATION; 0 in MARRIAGE) not covered by
+        the official data dictionary, folded into existing "Other" categories; and
+        the <strong>PAY_ status columns contain two undocumented values (0 and -2)</strong>
+        that together make up over half the dataset — kept as-is, since they couldn't
+        be dropped, but flagged explicitly as an interpretive ambiguity rather than
+        given an invented confident meaning.
+      </p>
+
+      <h3>Feature engineering</h3>
+      <p>
+        Rather than feeding 18 raw monthly columns directly into the model, six
+        behavioral features were engineered to capture trends rather than snapshots:
+        average and maximum payment delay, count of months delayed, average credit
+        utilization, 6-month bill trend (growing vs. shrinking debt), and a
+        payment-to-bill ratio. Two of these initially produced statistically invalid
+        results (a payment ratio ranging from &minus;546 to 797) due to division by
+        near-zero bill amounts &mdash; caught during review and fixed by capping
+        values to a realistic range rather than silently trusting the raw output.
+      </p>
+
+      <h3>Modelling log</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <p><strong>Baseline Logistic Regression</strong> (0.5 threshold): 81% accuracy, but only 30% recall on actual defaulters &mdash; the class imbalance problem in action.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <p><strong>Two imbalance-handling approaches tested independently:</strong> <code>class_weight='balanced'</code> (changes how the model learns) and manual threshold adjustment to 0.3 (changes how predictions are read from the same model).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <p><strong>Random Forest</strong> added as a second model, also with balanced class weights, to test whether a non-linear model could better separate the classes.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <p><strong>Cost-based evaluation:</strong> converted each model's false negatives and false positives into estimated NT$ loss, using real client bill amounts rather than an assumed flat cost.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-text">
+            <p><strong>Sensitivity check:</strong> re-ran the cost comparison across four different false-positive cost assumptions (5%&ndash;30% of bill amount) to test whether the ranking was robust or fragile.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Model comparison</h3>
+      <table>
+        <tr><th>Model</th><th>Recall (defaulters)</th><th>ROC-AUC</th><th>Est. Cost (NT$)</th></tr>
+        <tr><td>Logistic Regression (0.5 threshold)</td><td>0.30</td><td>0.744</td><td>40.9M</td></tr>
+        <tr><td>Logistic Regression (threshold 0.3)</td><td>0.53</td><td>0.744</td><td>27.8M</td></tr>
+        <tr class="final-row"><td>Logistic Regression (balanced)</td><td>0.60</td><td>0.747</td><td class="highlight">25.7M</td></tr>
+        <tr class="final-row"><td>Random Forest (balanced)</td><td>0.61</td><td class="highlight">0.777</td><td>26.2M</td></tr>
+      </table>
+
+      <div class="tool-tags">
+        <span class="tool-tag">Python (pandas, scikit-learn)</span>
+        <span class="tool-tag">Logistic Regression / Random Forest</span>
+        <span class="tool-tag">Class imbalance handling</span>
+        <span class="tool-tag">Cost-sensitive evaluation</span>
+        <span class="tool-tag">UCI Machine Learning Repository</span>
+        <span class="tool-tag">Power BI</span>
+      </div>
+    </section>
+
+    <section id="interpretation">
+      <h2>Interpretation</h2>
+      <p>
+        The headline finding isn't which single model "wins" &mdash; it's that
+        <strong>the statistically best model and the financially best model were
+        different models</strong>, and the gap between the naive approach and any
+        imbalance-aware approach was large and consistent (30&ndash;40% cost
+        reduction) across every cost assumption tested.
+      </p>
+      <div class="quote-block">
+        "Across a wide range of plausible false-positive cost assumptions, any model
+        that addresses class imbalance substantially outperforms the naive
+        default-threshold model. Among the imbalance-aware options, the single best
+        choice depends on the lender's real cost of declining a good customer
+        relative to the cost of a missed default &mdash; a business judgment, not a
+        statistic to be optimized in isolation."
+      </div>
+    </section>
+
+    <section id="limitations">
+      <h2>Limitations</h2>
+      <div class="limitations-box">
+        <div class="item">
+          <div class="t">2005 Taiwanese data, not current UK data</div>
+          <p>The dataset demonstrates methodology &mdash; imbalanced classification, cost-sensitive evaluation, feature engineering &mdash; rather than making a claim about current UK consumer credit risk specifically.</p>
+        </div>
+        <div class="item">
+          <div class="t">Cost assumptions are estimates, not facts</div>
+          <p>The false-positive cost (10% of bill amount, tested from 5&ndash;30%) is a reasonable, stated assumption. A real deployment would need actual cost figures from the business rather than an analyst's estimate.</p>
+        </div>
+        <div class="item">
+          <div class="t">Two undocumented category codes in the payment status columns</div>
+          <p>PAY_ values of 0 and -2 make up over half the dataset and aren't officially defined by the data provider. They were kept in the model as-is, but their exact meaning is an informed interpretation, not a confirmed fact.</p>
+        </div>
+        <div class="item">
+          <div class="t">A single train/test split, not cross-validated</div>
+          <p>Given the dataset's size (30,000 rows) this is a reasonable choice, but a production model would benefit from k-fold cross-validation to confirm the reported metrics are stable.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="links">
+      <h2>Explore further</h2>
+      <p>Full analysis notebook and the Power BI file are available on request or via GitHub.</p>
+      <div class="cta-row">
+        <a href="https://github.com/ikramelbahri" target="_blank">View on GitHub</a>
+        <a href="index.html">Back to portfolio</a>
+      </div>
+    </section>
+
+    <footer>&copy; 2026 Ikram Elbahri</footer>
+  </div>
+
+</body>
+</html>
